@@ -39,11 +39,6 @@ public class MenuRestController {
 
     @PostMapping("/delete_menu_item")
     public HashMap<String, String> remove_menu_item(Long menu_item_id,HttpServletRequest request) {
-        // @SuppressWarnings("unchecked")
-        // Map<String, String> messages = (Map<String, String>) request.getSession().getAttribute("MY_SESSION_MESSAGES");
-		// String email = String.valueOf(messages.get("email"));
-		// User user = userService.findUserByEmail(email);
-		
         MenuItems menuItem = menuService.getMenuItem(menu_item_id);
         menuItem.setIsEnabled(false);
         menuItem = menuService.saveMenuItem(menuItem);
