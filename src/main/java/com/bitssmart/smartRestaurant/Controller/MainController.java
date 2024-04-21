@@ -139,6 +139,11 @@ public class MainController {
 		  }
 		  if(user.getUserRoles().equals(UserRoles.DELIVERY_GUY)) {
 			  System.out.println("email user---->"+user.getEmail());
+			  user.getDeliveryGuy().setName(user.getName());
+			  user.getDeliveryGuy().setPassword(user.getPassword());
+			//   user.getDeliveryGuy().setCreatededAt(user.getCreatededAt());
+			//   user.getDeliveryGuy().setUpdatedAt(user.getUpdatedAt());
+			  user.getDeliveryGuy().setEmail(user.getEmail());
 			  user.getDeliveryGuy().setUserid(user);
 			  user.getDeliveryGuy().setIsApproved(false);
 		  }

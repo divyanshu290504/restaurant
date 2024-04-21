@@ -7,8 +7,6 @@ import java.util.Map;
 import jakarta.servlet.http.HttpServletRequest;
 
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.security.core.Authentication;
-import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.stereotype.Controller;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestMethod;
@@ -35,27 +33,6 @@ public class DeliveryGuyController {
 	@Autowired
 	private UserService userService;
 	
-//	@RequestMapping(value= {"/registerGuy"}, method=RequestMethod.POST)
-//	 public ModelAndView createUser(@Valid DeliveryGuy guy, BindingResult bindingResult) {
-//	  ModelAndView model = new ModelAndView();
-//	  DeliveryGuy guyExists = deliveryGuyService.findUserByEmail(guy.getEmail());
-//	  
-//	  if(guyExists != null) {
-//	   bindingResult.rejectValue("email", "error.user", "This email already exists!");
-//	  }
-//	  if(bindingResult.hasErrors()) {
-//	   model.setViewName("deliveryRegister");
-//	  } else {
-//		  guy.setIsEnabled(true);
-//		  guy.setIsApproved(false);
-//		  deliveryGuyService.saveUser(guy);
-//		  model.addObject("msg", "Delivery Guy has been registered successfully!");
-//		  model.addObject("guy", new DeliveryGuy());
-//		  model.setViewName("deliveryRegister");
-//	  }
-//	  
-//	  return model;
-//	 }
 	private static List<FoodOrder> foodOrderList = new ArrayList<>();;
 	
 	@RequestMapping(value={"/loginDeliveryGuy"},method={RequestMethod.GET})    
@@ -91,11 +68,13 @@ public class DeliveryGuyController {
 	
 //@ModelAttribute("orderIds") List<Long> orderIds
 	@RequestMapping(value={"/refreshOrders"},method={RequestMethod.POST})    
-	public ModelAndView selectOrders( )  
+	public ModelAndView selectOrders(HttpServletRequest request)  
 	{
 		ModelAndView model = new ModelAndView();
-		Authentication auth = SecurityContextHolder.getContext().getAuthentication();
-    	User user = userService.findUserByEmail(auth.getName());
+		@SuppressWarnings("unchecked")
+        Map<String, String> messages = (Map<String, String>) request.getSession().getAttribute("MY_SESSION_MESSAGES");
+		String email = String.valueOf(messages.get("email"));
+    	User user = userService.findUserByEmail(email);
 		model.addObject("userName", user.getName());
 		List<FoodOrder> orderList = orderService.getAllFoodOrders();
 		System.out.println(orderList);
@@ -105,11 +84,12 @@ public class DeliveryGuyController {
 	}
 	
 	@RequestMapping(value={"/selectOrders"},method={RequestMethod.POST})    
-	public ModelAndView selectOrders( @RequestParam(value = "orderIds" , required = false) long[] orderIds )  
+	public ModelAndView selectOrders( @RequestParam(value = "orderIds" , required = false) long[] orderIds, HttpServletRequest request)  
 	{
-		Authentication auth = SecurityContextHolder.getContext().getAuthentication();
-		System.out.println(auth.getName());
-		User user = userService.findUserByEmail(auth.getName());
+		@SuppressWarnings("unchecked")
+        Map<String, String> messages = (Map<String, String>) request.getSession().getAttribute("MY_SESSION_MESSAGES");
+		String email = String.valueOf(messages.get("email"));
+		User user = userService.findUserByEmail(email);
 		//List<FoodOrder> foodOrderList = new ArrayList<>();
 		foodOrderList.clear();
 		if(null != orderIds) {
@@ -131,11 +111,12 @@ public class DeliveryGuyController {
 	}
 	
 	@RequestMapping(value={"/orderDelivered"},method={RequestMethod.POST})    
-	public ModelAndView selectOrders( @RequestParam("orderid") long orderid , @RequestParam("otp") String otp )  
+	public ModelAndView selectOrders( @RequestParam("orderid") long orderid , @RequestParam("otp") String otp, HttpServletRequest request )  
 	{
-		Authentication auth = SecurityContextHolder.getContext().getAuthentication();
-		System.out.println(auth.getName());
-		User user = userService.findUserByEmail(auth.getName());
+		@SuppressWarnings("unchecked")
+        Map<String, String> messages = (Map<String, String>) request.getSession().getAttribute("MY_SESSION_MESSAGES");
+		String email = String.valueOf(messages.get("email"));
+		User user = userService.findUserByEmail(email);
 		FoodOrder fo1 = orderService.getFoodOrder(orderid);
 		System.out.println(fo1);
 		System.out.println("::::::::::::::::::::::::::: "+foodOrderList);

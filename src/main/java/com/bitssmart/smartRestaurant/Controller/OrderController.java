@@ -49,8 +49,6 @@ public class OrderController {
 		System.out.println(foodOrder.getOrderItems());
 		foodOrder.setIsPaid(true);
 		foodOrder.setOrderStatus(OrderStatus.ACCEPTED);
-		// Authentication auth = SecurityContextHolder.getContext().getAuthentication();
-		// System.out.println(auth.getName());
 		User user = (User) request.getSession().getAttribute("currentUser");
 		foodOrder.setCustomerID(user.getCustomer());
 		System.out.println("in save order  :::"+user);
@@ -67,41 +65,17 @@ public class OrderController {
 		foodOrder = orderService.saveFoodOrder(foodOrder);
 		System.out.println(foodOrder);
 		
-		/*
-		 * ModelAndView modelAndView = new ModelAndView();
-		 * modelAndView.setViewName("customerDetails");
-		 * modelAndView.addObject("orderid",foodOrder.getId());
-		 * return modelAndView;
-		 */
-		
-//		ModelAndView modelAndView = new ModelAndView();    
-//		modelAndView.setViewName("customerDetails");
-//		return new ModelAndView("redirect:/customerDetails");
-		
 		ModelAndView modelAndView = new ModelAndView();
 		modelAndView.addObject("orderid",foodOrder.getId());
-//		modelAndView.addObject("foodOrder",foodOrder);
 		Customer customer = user.getCustomer();
 		modelAndView.addObject("customer",customer);
 		modelAndView.addObject("user",user);
 		modelAndView.setViewName("customerDetails");
-//		modelAndView.addObject("orderid",foodOrder.getId());
 		return modelAndView;
 		
 		
 	}
 	
-//	@RequestMapping("/customerDetails")
-//	@RequestMapping(value = "/customerDetails", method =RequestMethod.POST)
-//	public String customerDetails(Model model, @RequestParam long orderid){
-//		Customer customer = new Customer();
-//		FoodOrder fo = new FoodOrder();
-//		fo.setId(orderid);
-//		model.addAttribute("orderid",fo.getId());
-//		model.addAttribute("customer",customer);
-//		System.out.println("In customerDetails get method"+orderid + fo);
-//		return "customerDetails";
-//	}
 	
 	@RequestMapping(value = "/customerDetails", method =RequestMethod.POST)
 	public String mapCustomerDetails(@ModelAttribute("customer") Customer customer, @ModelAttribute("orderid") FoodOrder orderid, @ModelAttribute("orderType") OrderType orderType){
@@ -109,7 +83,6 @@ public class OrderController {
 		
 		System.out.println("------------"+orderid);
 		FoodOrder fo = orderService.getFoodOrder(orderid.getId());
-//		System.out.println(customer.getName()+" "+customer.getEmail()+" "+customer.getPhoneNumber());
 		System.out.println("::::::::::::::"+orderType);
 		System.out.println("------------"+orderid);
 		System.out.println(customer);
@@ -122,7 +95,9 @@ public class OrderController {
 			foodList = new ArrayList<>();
 			foodList.add(fo);
 		}
-		
+		if (orderType == OrderType.HOME_DELIVERY)
+			orderid.setOtp("0000");
+			System.out.println(orderid.getOtp());
 		System.out.println("fhbe"+fo);
 		System.out.println("Foodlist"+foodList);
 		customer.setOrderId(foodList);

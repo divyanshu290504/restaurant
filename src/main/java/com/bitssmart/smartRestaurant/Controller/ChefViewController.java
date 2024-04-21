@@ -11,6 +11,9 @@ import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.PostMapping;
 
 import com.bitssmart.smartRestaurant.Bean.OrderItemBeanforChef;
+// import com.bitssmart.smartRestaurant.Controller.OrderObserver.CustomerObserver;
+// import com.bitssmart.smartRestaurant.Controller.OrderObserver.DeliveryGuyObserver;
+// import com.bitssmart.smartRestaurant.Controller.OrderObserver.OrderItemObserver;
 // import com.bitssmart.smartRestaurant.Model.Customer;
 // import com.bitssmart.smartRestaurant.Model.FoodOrder;
 import com.bitssmart.smartRestaurant.Model.OrderItem;
@@ -41,6 +44,12 @@ public class ChefViewController {
 	
 	@GetMapping("/updateOrder/{id}")
 	public String updateOrder(@PathVariable(value = "id")long id, Model model) {
+		
+		// OrderItemObserver orderItemObserver = new OrderItemObserver();
+		// CustomerObserver customerObserver = new CustomerObserver();
+    	// DeliveryGuyObserver deliveryGuyObserver = new DeliveryGuyObserver();
+		// orderItemObserver.addObserver(customerObserver);
+        // orderItemObserver.addObserver(deliveryGuyObserver);
 		
 		OrderItemBeanforChef oiForChef = orderItemService.getOrderItemById(id);
 		
